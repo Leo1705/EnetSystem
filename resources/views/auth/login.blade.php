@@ -19,13 +19,16 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            padding:0;
+            height:600px;
         }
         .image-section {
             background: url('../../logInImage.png') no-repeat center;
             background-size: cover;
         }
         .logo img {
-            max-height: 60px;
+            width:90%;
+            margin:20px auto;
         }
     </style>
 </head>
@@ -33,7 +36,7 @@
     <div class="container row mx-auto w-75">
         <div class="col-md-6 p-5 d-flex flex-column">
             <div class="logo text-center mb-4">
-                <img src="../../EnetLogo.png" alt="Logo">
+                <img src="{{asset('EnetLogo.png')}}" alt="Logo">
             </div>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
