@@ -23,6 +23,7 @@
     </style>
 </head>
 <body>
+    <section class="main-section-navigaation">
     <aside>
         <div class="aside-navigation">
             <img src="{{asset('EnetLogo.png')}}" class="logo-image" alt="logo Enet"/>
@@ -88,5 +89,6 @@
         <section class=""></section>
         <section class=""></section>
     </main>
+    </section>
 </body>
 </html>
