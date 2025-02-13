@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <!-- External Fonts (Google Fonts) -->
+    <title>Persons Management</title>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet"> 
-    <!-- ovoj ga zima od public/css -->
+    
     <!-- Font Awesome CDN -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-    <!-- Placeholder for CSS -->
+    <link rel="stylesheet" href="peapole.css"/>
+
     <style>
-           * {
+        * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -207,6 +207,7 @@ body,
     </style>
 </head>
 <body>
+
     <aside>
     <div class="aside-navigation">
             <img src="{{asset('EnetLogo.png')}}" class="logo-image" alt="logo Enet"/>
@@ -255,21 +256,70 @@ body,
                         </nav>
                     </div>
     </aside>
-    <main>
-        <section class="information-section">
-            <div>
-                <h1>Dashboard</h1>
+
+    <header>
+        <h1>Persons Management</h1>
+        <div class="search">
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="profile">
+            <img src="https://via.placeholder.com/40" alt="User">
+            <span>Swetha Shankaresk<br><small>Teacher</small></span>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>List of All Persons</h2>
+
+        <div class="person-card">
+            <div class="person-info">
+                <span class="name">Filip Petkovski</span>
+                <span class="subject">Math</span>
             </div>
-            <div>
-                <input type="search" placeholder="Search" name="search"/>
-                <i class="fa-regular fa-bell"></i>
-                <i class="fa-regular fa-envelope"></i>
+            <button class="group-btn">3 Groups</button>
+            <span class="role">Parent</span>
+            <button class="manage-btn">Manage</button>
+        </div>
+        <div class="person-card">
+            <div class="person-info">
+                <span class="name">Matej Spasik</span>
+                <span class="subject">Math</span>
             </div>
-        </section>
-        <section class=""></section>
-        <section class=""></section>
-        <section class=""></section>
-        <section class=""></section>
-    </main>
+            <button class="group-btn">3 Groups</button>
+            <span class="role">Parent</span>
+            <button class="manage-btn">Manage</button>
+        </div>
+        <div class="person-card">
+            <div class="person-info">
+                <span class="name">Leonid Petkovski</span>
+                <span class="subject">Math</span>
+            </div>
+            <button class="group-btn">3 Groups</button>
+            <span class="role">Parent</span>
+            <button class="manage-btn">Manage</button>
+        </div>
+        <div class="person-card">
+            <div class="person-info">
+                <span class="name">Marko Spasik</span>
+                <span class="subject">Math</span>
+            </div>
+            <button class="group-btn">3 Groups</button>
+            <span class="role">Parent</span>
+            <button class="manage-btn">Manage</button>
+        </div>
+        <div class="person-card">
+            <div class="person-info">
+                <span class="name">Jovan Sojic</span>
+                <span class="subject">Math</span>
+            </div>
+            <button class="group-btn">3 Groups</button>
+            <span class="role">Parent</span>
+            <button class="manage-btn">Manage</button>
+        </div>
+        
+        <!-- Add more person-card blocks here if needed -->
+
+    </div>
+
 </body>
 </html>
