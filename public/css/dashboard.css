@@ -1,75 +1,190 @@
-body{
-    width:100%;
-    position:relative;
-    height:150vh;
+body {
+    width: 100%;
+    position: relative;
+    height: 150vh;
+    background: linear-gradient(0deg, #EFEFEF 100%, #4A99A3 0%);
 }
-.main-section-navigation{
-    width:100%;
+
+.main-section-navigation {
+    width: 100%;
 }
-aside{
-    position:fixed;
-    top:0;
-    left:0;
-    width:20%;
-    z-index:2;
+
+aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    z-index: 2;
     height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
 }
-.aside-navigation{
+
+.aside-navigation {
     box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.25);
-    width:20%;
-    border-radius:10px;
+    width: 20%;
+    border-radius: 10px;
 }
-.logo-image{
-    width:300px;
-    margin:0px auto;
-    position:absolute;
-    padding:20px;
-    left:50%;
+
+.logo-image {
+    width: 300px;
+    margin: 0px auto;
+    position: absolute;
+    padding: 20px;
+    left: 50%;
     transform: translate(-50%);
 }
 
-nav{
-    position:absolute;
-    top:100px;
+nav {
+    position: absolute;
+    top: 100px;
 }
-.aside-navigation nav{
-    width:100%;
+
+.aside-navigation nav {
+    width: 100%;
 }
-nav li{
-    list-style-type: none; 
-    text-align: left; 
-    padding:0px 50px;
+
+nav li {
+    list-style-type: none;
+    text-align: left;
+    padding: 0px 50px;
 }
-nav .active{
+
+nav .active {
     background: linear-gradient(to bottom, #ADBBDE 0%, rgba(182, 188, 202, 0) 100%);
 }
-nav li a{
+
+nav li a {
     text-decoration: none;
-    color:#2B59CE;
-    font-size:18px;
+    color: #2B59CE;
+    font-size: 18px;
 }
-nav li a i{
-    padding:20px 5px;
+
+nav li a i {
+    padding: 20px 5px;
 }
-.internal-navigation{
-    margin-top:50px;
+
+.internal-navigation {
+    margin-top: 50px;
 }
-.internal-navigation li{
+
+.internal-navigation li {
     text-align: center;
-    padding:10px 0px;
+    padding: 10px 0px;
 }
-.internal-navigation li a{
-    color:grey;
+
+.internal-navigation li a {
+    color: grey;
 }
+
 /* ----------MAIN SECTION-------- */
-main{
-    background: linear-gradient(to right, rgba(239, 239, 239, 1) 0%, rgba(74, 153, 163, 0) 100%);
-    width:60%;
+main {
+    background: linear-gradient(0deg, #EFEFEF 100%, #4A99A3 0%);
+    width: 60%;
     height: 100vh;
-    margin-left:20%;
+    margin-left: 20%;
+    padding-top: 1%;
 }
-.information-section{
-    margin:0px 50px 0px;
+
+.information-section {
+    margin: 0px 50px 0px;
+    position: relative;
+}
+
+.search-input {
+    border: none;
+    padding: 7px 10px 7px 10px;
+    width: 50%;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+.search-bar {
+    position: relative;
+}
+
+.dashboard-icons {
+    position: relative;
+
+}
+
+.dashboard-icons {
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.dashboard-icons i {
+    padding: 0px 5px;
+    cursor: pointer;
+}
+
+/* --------------UPCOMING GROUP COURSE SECTION------- */
+.upcoming-group-course,
+.students-list {
+    margin: 50px 50px 0px;
+    background-color: white;
+    padding: 15px 50px;
+    border-radius: 10px;
+}
+
+.upcoming-group-course .course-group-card {
+    background-color: rgba(212, 222, 255, 1);
+    padding: 20px;
+    margin: 20px 0px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.course-group-card .course-group-card-btn {
+    background-color: rgba(37, 37, 173, 1);
+    color: white;
+    padding: 7px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
+
+/* --------------MY STUDENTS SECTION----------- */
+.two-sec-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.students-list h3 {
+    margin: 0px 0px;
+}
+
+.student-list-card {
+    background-color: rgba(164, 247, 177, 1);
+    padding: 10px;
+    display: flex;
+
+    justify-content: start;
+    align-items: center;
+    border-radius: 10px;
+    margin: 10px 0px;
+}
+
+.student-list-card-content {
+    margin: 0px 50px;
+}
+
+.student-list-card-content span {
+    font-size: 14px;
+    color: grey;
+}
+
+.students-list {
+    overflow-x: hidden;
+    height: 400px;
 }
