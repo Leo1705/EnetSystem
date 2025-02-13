@@ -23,7 +23,6 @@
     </style>
 </head>
 <body>
-    <section class="main-section-navigaation">
     <aside>
         <div class="aside-navigation">
             <img src="{{asset('EnetLogo.png')}}" class="logo-image" alt="logo Enet"/>
@@ -78,17 +77,105 @@
             <div>
                 <h1>Dashboard</h1>
             </div>
-            <div>
-                <input type="search" placeholder="Search" name="search"/>
-                <i class="fa-regular fa-bell"></i>
-                <i class="fa-regular fa-envelope"></i>
+            <div class="search-bar">
+                <input type="search" placeholder="🔍 Search" name="search" class="search-input"></input>
+                <div class="dashboard-icons">
+                <i class="fa-regular fa-bell fa-1.5x"></i>
+                <i class="fa-regular fa-envelope fa-1.5x"></i>
+    </div>    
             </div>
         </section>
-        <section class=""></section>
-        <section class=""></section>
-        <section class=""></section>
+        <section class="upcoming-group-course">
+            <h2>Upcoming Group Course</h2>
+            <div class="course-group-card">
+                <h3 class="course-group-card-title">C++ Group 1</h3>
+                <button class="course-group-card-btn">View More</button>
+    </div>
+        </section>
+        <div class="two-sec-row">
+        <section class="students-list">
+            <h3>My Students</h3>
+            <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+            </div>
+        </section>
+        <section class="students-list">
+            <h3>My Students</h3>
+            <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+    <div class="students-card-list">
+            <div class="student-list-card">
+                <img src="{{ asset('media/dashboard/studentExamplePic.png') }}" alt="Student Image" class="students-list-card-image">
+               <div class="student-list-card-content">
+                <h3 class="students-list-card-name">Shyam Nithin</h3>
+                <span class="students-list-card-course">Math</span>
+    </div>
+
+    </div>
+            </div>
+        </section>
+        </div>
         <section class=""></section>
     </main>
-    </section>
+    
 </body>
 </html>
