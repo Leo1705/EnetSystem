@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 Route::get('/people-management', function () {
     return view('peapole');
-});
+})->middleware(['auth'])->name('people-management');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
