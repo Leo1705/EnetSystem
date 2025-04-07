@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persons Management</title>
+    <title>Course Groups</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -222,8 +222,8 @@
             margin-bottom: 20px;
         }
 
-        /* Person Card Styling */
-        .person-card {
+        /* Group Card Styling */
+        .group-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -234,24 +234,24 @@
             border: 1px solid #eaeaea;
         }
 
-        .person-info {
+        .group-info {
             display: flex;
             flex-direction: column;
             width: 200px;
         }
 
-        .person-name {
+        .group-name {
             font-weight: 600;
             font-size: 16px;
             margin-bottom: 5px;
         }
 
-        .person-subject {
+        .group-subject {
             color: #666;
             font-size: 14px;
         }
 
-        .group-button {
+        .people-count {
             background-color: #e6eeff;
             color: #3b82f6;
             border: none;
@@ -259,19 +259,18 @@
             padding: 8px 15px;
             font-size: 14px;
             font-weight: 500;
-            cursor: pointer;
             width: 100px;
             text-align: center;
         }
 
-        .person-role {
+        .max-capacity {
             font-size: 14px;
             color: #666;
-            width: 100px;
-            text-align: center;
+            width: 150px;
+            text-align: right;
         }
 
-        .manage-button {
+        .add-button {
             background-color: #3b82f6;
             color: white;
             border: none;
@@ -284,7 +283,7 @@
             text-align: center;
         }
 
-        .manage-button:hover {
+        .add-button:hover {
             background-color: #2563eb;
         }
     </style>
@@ -310,7 +309,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('people-management') }}" class="nav-link active">
+                <a href="{{ route('people-management') }}" class="nav-link">
                     <i class="fas fa-book"></i>
                     <span class="nav-text">Persons Management</span>
                 </a>
@@ -329,10 +328,10 @@
                 </a>
             </li>
             
-
+        
             
             <li class="nav-item">
-                <a href="{{ route('course-group') }}" class="nav-link">
+                <a href="{{ route('course-group') }}" class="nav-link active">
                     <i class="far fa-comment-alt"></i>
                     <span class="nav-text">Course Group</span>
                 </a>
@@ -366,7 +365,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
-            <h1 class="page-title">Persons Management</h1>
+            <h1 class="page-title">Course Groups</h1>
             
             <div class="header-right">
                 <div class="search-container">
@@ -392,67 +391,67 @@
         </div>
         
         <div class="content-container">
-            <h2 class="content-title">List of All Persons</h2>
+            <h2 class="content-title">List of All Groups</h2>
             
-            <!-- Person Cards -->
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Filip Petkovski</div>
-                    <div class="person-subject">Math</div>
+            <!-- Group Cards -->
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 1</div>
+                    <div class="group-subject">Mathematics</div>
                 </div>
-                <div class="group-button">3 Group</div>
-                <div class="person-role">Parent</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">30 people</div>
+                <div class="max-capacity">Max: 60 people</div>
+                <button class="add-button">Add New</button>
             </div>
             
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Marko Maksimovski</div>
-                    <div class="person-subject">German</div>
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 2</div>
+                    <div class="group-subject">C++</div>
                 </div>
-                <div class="group-button">2 Group</div>
-                <div class="person-role">Student</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">20 people</div>
+                <div class="max-capacity">Max: 50 people</div>
+                <button class="add-button">Add New</button>
             </div>
             
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Matej Velickovic</div>
-                    <div class="person-subject">C++</div>
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 3</div>
+                    <div class="group-subject">HTML/CSS</div>
                 </div>
-                <div class="group-button">1 Group</div>
-                <div class="person-role">Student</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">10 people</div>
+                <div class="max-capacity">Max: 45 people</div>
+                <button class="add-button">Add New</button>
             </div>
             
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Teodor Panevski</div>
-                    <div class="person-subject">Math</div>
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 4</div>
+                    <div class="group-subject">Maths</div>
                 </div>
-                <div class="group-button">5 Group</div>
-                <div class="person-role">Student</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">30 people</div>
+                <div class="max-capacity">Max: 75 people</div>
+                <button class="add-button">Add New</button>
             </div>
             
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Petar Ilievski</div>
-                    <div class="person-subject">English</div>
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 5</div>
+                    <div class="group-subject">C#</div>
                 </div>
-                <div class="group-button">2 Group</div>
-                <div class="person-role">Personal</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">17 people</div>
+                <div class="max-capacity">Max: 30 people</div>
+                <button class="add-button">Add New</button>
             </div>
             
-            <div class="person-card">
-                <div class="person-info">
-                    <div class="person-name">Ana Jordanovska</div>
-                    <div class="person-subject">All Day Class</div>
+            <div class="group-card">
+                <div class="group-info">
+                    <div class="group-name">Group 6</div>
+                    <div class="group-subject">Javascript</div>
                 </div>
-                <div class="group-button">4 Group</div>
-                <div class="person-role">Parent</div>
-                <button class="manage-button">Manage</button>
+                <div class="people-count">13 people</div>
+                <div class="max-capacity">Max: 56 people</div>
+                <button class="add-button">Add New</button>
             </div>
         </div>
     </div>
@@ -463,14 +462,14 @@
             
             // Example: Search functionality
             const searchInput = document.querySelector('.search-input');
-            const personCards = document.querySelectorAll('.person-card');
+            const groupCards = document.querySelectorAll('.group-card');
             
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
                 
-                personCards.forEach(card => {
-                    const name = card.querySelector('.person-name').textContent.toLowerCase();
-                    const subject = card.querySelector('.person-subject').textContent.toLowerCase();
+                groupCards.forEach(card => {
+                    const name = card.querySelector('.group-name').textContent.toLowerCase();
+                    const subject = card.querySelector('.group-subject').textContent.toLowerCase();
                     
                     if (name.includes(searchTerm) || subject.includes(searchTerm)) {
                         card.style.display = 'flex';
@@ -480,13 +479,13 @@
                 });
             });
             
-            // Example: Manage button click
-            const manageButtons = document.querySelectorAll('.manage-button');
+            // Example: Add New button click
+            const addButtons = document.querySelectorAll('.add-button');
             
-            manageButtons.forEach(button => {
+            addButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const personName = this.closest('.person-card').querySelector('.person-name').textContent;
-                    alert(`Managing ${personName}`);
+                    const groupName = this.closest('.group-card').querySelector('.group-name').textContent;
+                    alert(`Add new student to ${groupName}`);
                 });
             });
         });
