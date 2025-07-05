@@ -638,7 +638,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('attendance') }}"class="nav-link active">
+                <a href="{{ route('attendance.index') }}"class="nav-link active">
                     <i class="far fa-calendar"></i>
                     <span class="nav-text">Calendar</span>
                 </a>
@@ -732,196 +732,197 @@
         
         <div class="calendar-container">
             <!-- Main Calendar -->
-            <div class="calendar-main">
-                <div class="calendar-header">
-                    <h2 class="calendar-title">OCTOBER 2024</h2>
-                    
-                    <div class="calendar-actions">
-                        <div class="view-buttons">
-                            <button class="view-btn" data-view="daily">Daily</button>
-                            <button class="view-btn" data-view="weekly">Weekly</button>
-                            <button class="view-btn active" data-view="monthly">Monthly</button>
-                            <button class="view-btn" data-view="yearly">Yearly</button>
-                        </div>
-                        <button class="new-schedule-btn" id="new-event-btn">New schedule</button>
-                    </div>
-                </div>
-                
-                <table class="calendar-grid">
-                    <thead>
-                        <tr>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
-                            <th>Saturday</th>
-                            <th>Sunday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Week 1 -->
-                        <tr>
-                            <td></td>
-                            <td>
-                                <div class="date-number">1</div>
-                            </td>
-                            <td>
-                                <div class="date-number">2</div>
-                            </td>
-                            <td>
-                                <div class="date-number">3</div>
-                            </td>
-                            <td>
-                                <div class="date-number">4</div>
-                            </td>
-                            <td>
-                                <div class="date-number">5</div>
-                            </td>
-                            <td>
-                                <div class="date-number">6</div>
-                            </td>
-                        </tr>
-                        <!-- Week 2 -->
-                        <tr>
-                            <td>
-                                <div class="date-number">7</div>
-                            </td>
-                            <td>
-                                <div class="date-number">8</div>
-                            </td>
-                            <td>
-                                <div class="date-number">9</div>
-                            </td>
-                            <td>
-                                <div class="date-number">10</div>
-                            </td>
-                            <td>
-                                <div class="date-number">11</div>
-                                <div class="calendar-event blue" data-event-id="1">Matematika Grupa 1</div>
-                            </td>
-                            <td>
-                                <div class="date-number">12</div>
-                            </td>
-                            <td>
-                                <div class="date-number">13</div>
-                            </td>
-                        </tr>
-                        <!-- Week 3 -->
-                        <tr>
-                            <td>
-                                <div class="date-number">14</div>
-                            </td>
-                            <td>
-                                <div class="date-number">15</div>
-                                <div class="calendar-event pink" data-event-id="2">C++ Grupa 1</div>
-                            </td>
-                            <td>
-                                <div class="date-number">16</div>
-                            </td>
-                            <td>
-                                <div class="date-number">17</div>
-                            </td>
-                            <td>
-                                <div class="date-number">18</div>
-                            </td>
-                            <td>
-                                <div class="date-number">19</div>
-                            </td>
-                            <td>
-                                <div class="date-number">20</div>
-                            </td>
-                        </tr>
-                        <!-- Week 4 -->
-                        <tr>
-                            <td>
-                                <div class="date-number">21</div>
-                            </td>
-                            <td>
-                                <div class="date-number">22</div>
-                            </td>
-                            <td>
-                                <div class="date-number">23</div>
-                            </td>
-                            <td>
-                                <div class="date-number">24</div>
-                            </td>
-                            <td>
-                                <div class="date-number">25</div>
-                            </td>
-                            <td>
-                                <div class="date-number">26</div>
-                            </td>
-                            <td>
-                                <div class="date-number">27</div>
-                            </td>
-                        </tr>
-                        <!-- Week 5 -->
-                        <tr>
-                            <td>
-                                <div class="date-number">28</div>
-                            </td>
-                            <td>
-                                <div class="date-number">29</div>
-                            </td>
-                            <td>
-                                <div class="date-number">30</div>
-                            </td>
-                            <td>
-                                <div class="date-number">31</div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            @php
+    use Carbon\Carbon;
+    // determine how many blanks before day 1
+    $firstOfMonth = Carbon::create($year, $month, 1);
+    $startWeekday = $firstOfMonth->dayOfWeekIso; // 1 (Mon) – 7 (Sun)
+    $daysInMonth  = $firstOfMonth->daysInMonth;
+    $todayIso     = Carbon::now()->toDateString();
+@endphp
+
+<div class="calendar-main">
+  <div class="calendar-header">
+    <h2 class="calendar-title">
+      {{ strtoupper($firstOfMonth->format('F Y')) }}
+    </h2>
+    <div class="calendar-actions">
+      {{-- nav to prev month --}}
+      <a href="{{ route('attendance.index', [
+            'year'=>$firstOfMonth->copy()->subMonth()->year,
+            'month'=>$firstOfMonth->copy()->subMonth()->month,
+          ]) }}"
+         class="view-btn"><i class="fas fa-chevron-left"></i></a>
+      <a href="{{ route('attendance.index', [
+            'year'=>$firstOfMonth->copy()->addMonth()->year,
+            'month'=>$firstOfMonth->copy()->addMonth()->month,
+          ]) }}"
+         class="view-btn"><i class="fas fa-chevron-right"></i></a>
+      <button class="new-schedule-btn" id="new-event-btn">New schedule</button>
+    </div>
+  </div>
+
+  <table class="calendar-grid">
+    <thead>
+      <tr>
+      @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $wd)
+        <th>{{ $wd }}</th>
+      @endforeach
+      </tr>
+    </thead>
+    <tbody>
+      @php $day = 1; @endphp
+
+      @for($week=0; $week<6; $week++)
+        @if($day > $daysInMonth) @break @endif
+        <tr>
+          @for($dow=1; $dow<=7; $dow++)
+            @if($week===0 && $dow < $startWeekday)
+              <td></td>
+            @elseif($day > $daysInMonth)
+              <td></td>
+            @else
+              @php
+                $dateString = $firstOfMonth->copy()->day($day)->toDateString();
+                $cellEvents = $events->filter(fn($e)=> $e->date->toDateString()===$dateString);
+              @endphp
+              <td>
+  <a href="{{ route('attendance.index', [
+        'year'       => $year,
+        'month'      => $month,
+        'date'       => $dateString,
+      ]) }}"
+     class="cell-link">
+    <div class="date-number">{{ $day }}</div>
+    {{-- …event dots… --}}
+  </a>
+</td>
+
+              @php $day++; @endphp
+            @endif
+          @endfor
+        </tr>
+      @endfor
+    </tbody>
+  </table>
+</div>
+
+{{-- Right Sidebar --}}
+{{-- Right-hand mini-schedule sidebar for the clicked day --}}
+<div class="calendar-sidebar">
+  <h3 class="sidebar-title">
+    Schedules for {{ \Carbon\Carbon::parse($currentDate)->format('F j, l') }}
+  </h3>
+
+  @if($dayEvents->isEmpty())
+    <p class="no-data">No scheduled classes on this day.</p>
+  @else
+    @foreach($dayEvents as $e)
+      <div class="time-slot">
+        <div class="time-label">
+          {{ $e->all_day
+               ? 'All day'
+               : $e->start_at->format('h:i A')
+          }}
+        </div>
+        <div class="time-event">
+          <div class="event-card {{ $e->color }}">
+            {{ $e->title }}
+          </div>
+        </div>
+      </div>
+    @endforeach
+  @endif
+</div>
+
+
+
+{{-- New Event Modal (update your form action + add CSRF!) --}}
+<div id="new-event-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Add New Event</h3>
+      <button class="close-btn">&times;</button>
+    </div>
+    <form method="POST" action="{{ route('attendance.store') }}" id="event-form">
+      @csrf
+
+      <input type="hidden" name="date" id="event-date">
+
+      <div class="form-group">
+        <label class="form-label" for="event-title">Event Title</label>
+        <input type="text" name="title" id="event-title" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="event-time">Time</label>
+        <input type="time" name="time" id="event-time" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="event-description">Description</label>
+        <textarea name="description"
+                  id="event-description"
+                  class="form-textarea"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Color</label>
+        <div class="color-options">
+          @foreach(['blue','pink','green','yellow','purple'] as $c)
+            <div class="color-option color-{{ $c }}"
+                 data-color="{{ $c }}"></div>
+          @endforeach
+          <input type="hidden" name="color" id="event-color" value="blue">
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" name="all_day" id="all-day" class="checkbox-input" value="1">
+        <span class="checkbox-custom"><i class="fas fa-check"></i></span>
+        <label for="all-day" class="checkbox-label">All day</label>
+      </div>
+
+      <button type="submit" class="submit-btn">Save Event</button>
+    </form>
+  </div>
+</div>
+
             
             <!-- Calendar Sidebar -->
-            <div class="calendar-sidebar">
-                <h3 class="sidebar-title">Schedules</h3>
-                <p class="sidebar-date">November 20, Monday</p>
-                
-                <div class="time-slot">
-                    <div class="time-label">10:00 AM</div>
-                    <div class="time-event">
-                        <div class="event-card blue">Live class</div>
-                    </div>
-                </div>
-                
-                <div class="time-slot">
-                    <div class="time-label">11:00 AM</div>
-                    <div class="time-event">
-                        <div class="event-card blue">Physics Workshop</div>
-                    </div>
-                </div>
-                
-                <div class="time-slot">
-                    <div class="time-label"></div>
-                    <div class="time-event">
-                        <div class="event-card blue">
-                            <i class="far fa-envelope"></i> Check Inbox
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="time-divider"></div>
-                <div class="time-marker">10 AM</div>
-                <div class="time-divider"></div>
-                <div class="time-marker">11 AM</div>
-                <div class="time-divider"></div>
-                <div class="time-marker">2 PM</div>
-                <div class="time-divider"></div>
-                
-                <div class="time-slot" style="margin-top: 20px;">
-                    <div class="time-label"></div>
-                    <div class="time-event">
-                        <div class="event-card blue">Weekly Meeting</div>
-                        <div class="event-card gray">Weekly students meeting</div>
-                    </div>
-                </div>
+            {{-- Right-hand mini-schedule sidebar --}}
+<div class="calendar-sidebar">
+  <h3 class="sidebar-title">Schedules</h3>
+
+  @if($dayEvents->isEmpty())
+    <p class="no-data">No scheduled classes today.</p>
+  @else
+    @foreach($dayEvents as $e)
+      <div class="time-slot">
+        <div class="time-label">
+          {{-- if all_day is set, say “All day” else show H:i A --}}
+          {{ $e->all_day
+               ? 'All day'
+               : $e->start_at->format('h:i A')
+          }}
+        </div>
+        <div class="time-event">
+          {{-- main event title --}}
+          <div class="event-card {{ $e->color }}">
+            {{ $e->title }}
+          </div>
+          {{-- optional description underneath --}}
+          @if($e->description)
+            <div class="event-card gray" style="margin-top:4px;">
+              {{ $e->description }}
             </div>
+          @endif
+        </div>
+      </div>
+    @endforeach
+  @endif
+</div>
+
         </div>
     </div>
     
@@ -1007,112 +1008,47 @@
     </div>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Event Modal
-            const newEventModal = document.getElementById('new-event-modal');
-            const newEventBtn = document.getElementById('new-event-btn');
-            const closeButtons = document.querySelectorAll('.close-btn');
-            
-            // Event Details Modal
-            const eventDetailsModal = document.getElementById('event-details-modal');
-            const calendarEvents = document.querySelectorAll('.calendar-event');
-            
-            // Color Options
-            const colorOptions = document.querySelectorAll('.color-option');
-            
-            // Open New Event Modal
-            newEventBtn.addEventListener('click', function() {
-                newEventModal.style.display = 'flex';
-            });
-            
-            // Open Event Details Modal
-            calendarEvents.forEach(event => {
-                event.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    eventDetailsModal.style.display = 'flex';
-                });
-            });
-            
-            // Close Modals
-            closeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    newEventModal.style.display = 'none';
-                    eventDetailsModal.style.display = 'none';
-                });
-            });
-            
-            // Close Modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target === newEventModal) {
-                    newEventModal.style.display = 'none';
-                }
-                if (e.target === eventDetailsModal) {
-                    eventDetailsModal.style.display = 'none';
-                }
-            });
-            
-            // Color Selection
-            colorOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    // Remove selected class from all options
-                    colorOptions.forEach(opt => opt.classList.remove('selected'));
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                });
-            });
-            
-            // Calendar Cell Click - Open New Event Modal
-            const calendarCells = document.querySelectorAll('.calendar-grid td');
-            calendarCells.forEach(cell => {
-                cell.addEventListener('click', function() {
-                    // Only open modal if cell has a date number (not empty)
-                    if (cell.querySelector('.date-number')) {
-                        newEventModal.style.display = 'flex';
-                    }
-                });
-            });
-            
-            // View Switching
-            const viewButtons = document.querySelectorAll('.view-btn');
-            viewButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    viewButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                });
-            });
-            
-            // Form Submission
-            const eventForm = document.getElementById('event-form');
-            eventForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                // Here you would typically handle the form data
-                // For now, just close the modal
-                newEventModal.style.display = 'none';
-            });
-            
-            // Edit and Delete Buttons
-            const editBtn = document.querySelector('.edit-btn');
-            const deleteBtn = document.querySelector('.delete-btn');
-            
-            editBtn.addEventListener('click', function() {
-                eventDetailsModal.style.display = 'none';
-                newEventModal.style.display = 'flex';
-                // Pre-fill form with event details
-                document.getElementById('event-title').value = 'C++ Grupa 1';
-                document.getElementById('event-time').value = '14:00';
-                document.getElementById('event-description').value = 'C++ programming class for Group 1';
-            });
-            
-            deleteBtn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to delete this event?')) {
-                    // Here you would typically delete the event
-                    eventDetailsModal.style.display = 'none';
-                }
-            });
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', ()=> {
+  const newEventModal = document.getElementById('new-event-modal');
+  const openBtn       = document.getElementById('new-event-btn');
+  const closeBtns     = newEventModal.querySelectorAll('.close-btn');
+  const dateInput     = document.getElementById('event-date');
+  const colorInputs   = document.querySelectorAll('.color-option');
+
+  // 1) Click a cell to open modal
+  document.querySelectorAll('.calendar-grid td[data-date]').forEach(td => {
+    td.addEventListener('click', ()=>{
+      dateInput.value = td.dataset.date;
+      newEventModal.style.display = 'flex';
+    });
+  });
+
+  // 2) “New schedule” button
+  openBtn.addEventListener('click', ()=>{
+    // default to today
+    dateInput.value = new Date().toISOString().slice(0,10);
+    newEventModal.style.display = 'flex';
+  });
+
+  // 3) Close
+  closeBtns.forEach(b=> b.addEventListener('click', ()=> {
+    newEventModal.style.display = 'none';
+  }));
+  window.addEventListener('click', e=>{
+    if (e.target === newEventModal) newEventModal.style.display='none';
+  });
+
+  // 4) Color picker
+  colorInputs.forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      colorInputs.forEach(o=> o.classList.remove('selected'));
+      opt.classList.add('selected');
+      document.getElementById('event-color').value = opt.dataset.color;
+    });
+  });
+});
+</script>
+
 </body>
 </html>
 

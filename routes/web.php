@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\AttendanceController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -14,6 +14,7 @@ Route::get('/', fn() => view('welcome'));
 
 // Bring in the auth scaffolding (login, logout, register, etc.)
 require __DIR__.'/auth.php';
+
 
 
 /*
@@ -38,11 +39,17 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/course-details', 'course-details')
          ->name('course-details');
 
-    // Attendance / Calendar
-    Route::view('/attendance', 'attendance')
-         ->name('attendance');
+  // routes/web.php
+
+Route::get('/attendance',   [AttendanceController::class, 'index'])
+     ->name('attendance.index');
+
+Route::post('/attendance',  [AttendanceController::class, 'store'])
+     ->name('attendance.store');
+
 
     // Course Group
     Route::view('/course-group', 'course-group')
          ->name('course-group');
+         
 });

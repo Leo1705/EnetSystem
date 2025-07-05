@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Announcement;
 use App\Models\Assignment;
+use App\Models\Schedule;  // ← your schedule model
+use App\Models\Event;     // ← your event model
 
 class DashboardController extends Controller
 {
@@ -13,34 +15,38 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // My Children
-        $children = $user->children;
+        // 1) My Children
+        $children = $user->children()->get();
 
-        // Completion Progress
+        // 2) Completion Progress
         $progress = $user->progress()->with('course')->get();
 
-        // Announcement
+        // 3) Active Announcement
         $announcement = Announcement::active()->latest()->first();
 
-        // Assignments: if teacher, get assignments on their courses;
-        // otherwise get assignments for groups the user belongs to.
-        if ($user->role === 'teacher') {
-            $courseIds = $user->courses->pluck('id');
-            $assignments = Assignment::whereIn('course_id', $courseIds)
-                                     ->with('course')
-                                     ->get();
-        } else {
-            $groupIds = $user->groups->pluck('id');
-            $assignments = Assignment::whereIn('group_id', $groupIds)
-                                     ->with('course')
-                                     ->get();
-        }
+        // 4) Assignments
+        $assignments = Assignment::where('user_id', $user->id)
+                                 ->with('course')
+                                 ->get();
+
+        // 5) Today’s Schedule — adjust the scope to match your schema
+        $scheduleItems = Schedule::whereDate('date', today())
+                                 ->orderBy('slot')
+                                 ->get();
+
+        // 6) Next 5 Upcoming Events
+        $upcomingEvents = Event::where('start_at', '>=', now())
+                               ->orderBy('start_at')
+                               ->limit(5)
+                               ->get();
 
         return view('dashboard', compact(
             'children',
             'progress',
+            'announcement',
             'assignments',
-            'announcement'
+            'scheduleItems',
+            'upcomingEvents'
         ));
     }
 }

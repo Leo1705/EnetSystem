@@ -385,7 +385,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('attendance') }}"class="nav-link">
+                <a href="{{ route('attendance.index') }}"class="nav-link">
                     <i class="far fa-calendar"></i>
                     <span class="nav-text">Calendar</span>
                 </a>
