@@ -3,52 +3,39 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
-/*
-|--------------------------------------------------------------------------
-| Public Routes
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\PersonController;
 
-// Landing page
+
 Route::get('/', fn() => view('welcome'));
 
-// Bring in the auth scaffolding (login, logout, register, etc.)
 require __DIR__.'/auth.php';
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Protected Routes
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware(['auth'])->group(function () {
-    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
          ->name('dashboard');
 
-    // People Management
-    Route::view('/people-management', 'people-management')
-         ->name('people-management');
+Route::view('/courses', 'courses')->name('courses.index');
 
-    // Courses List
-    Route::view('/courses', 'courses')->name('courses');
 
-    // Course Details
-    Route::view('/course-details', 'course-details')
-         ->name('course-details');
+Route::resource('people', PersonController::class);
 
-  // routes/web.php
+Route::view('/course-details',    'course-details')
+     ->name('course-details');
+
+
 
 Route::get('/attendance',   [AttendanceController::class, 'index'])
      ->name('attendance.index');
 
 Route::post('/attendance',  [AttendanceController::class, 'store'])
      ->name('attendance.store');
+     
+Route::get('/attendance/events', [AttendanceController::class,'events']);
 
 
-    // Course Group
     Route::view('/course-group', 'course-group')
          ->name('course-group');
          

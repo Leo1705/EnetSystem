@@ -368,6 +368,7 @@
                 margin-top: 10px;
             }
         }
+        
     </style>
 </head>
 <body>
@@ -390,14 +391,13 @@
                     <span class="nav-text">Calendar</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('people-management') }}" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Persons Management</span>
-                </a>
+             <li class="nav-item">
+               <a href="{{ route('people.index') }}" class="nav-link {{ request()->routeIs('people.*') ? 'active':'' }}">
+          <i class="fas fa-book"></i><span class="nav-text">People Management</span>
+        </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('courses') }}" class="nav-link active">
+                <a href="{{ route('courses.index') }}" class="nav-link active">
                     <i class="fas fa-chalkboard"></i>
                     <span class="nav-text">Courses</span>
                 </a>
@@ -473,7 +473,44 @@
                 <div class="tab" data-tab="completed">Completed <span class="tab-count">(5)</span></div>
                 <button class="add-course-btn">Add new Course</button>
             </div>
-            
+                <!-- … your existing courses-container here … -->
+
+    <!-- Add Course Modal -->
+    <!-- Add Course Modal -->
+<!-- Add Course Modal -->
+<div id="add-course-modal" style="display:none; position:fixed; top:0; left:0;
+     width:100%; height:100%; background:rgba(0,0,0,0.5);
+     align-items:center; justify-content:center; z-index:2000;">
+
+  <div class="modal-content" style="background:#fff; padding:20px;
+       border-radius:8px; width:320px; position:relative;">
+    <span id="close-modal" style="position:absolute; top:10px; right:10px;
+          cursor:pointer; font-size:20px;">×</span>
+
+    <h3 style="margin-bottom:10px;">Add New Course</h3>
+    <form id="add-course-form">
+      <label>
+        Course Title<br>
+        <input id="course-title" type="text" placeholder="Enter course title"
+               style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ddd; border-radius:4px;">
+      </label>
+
+      <label>
+        Mentor Name<br>
+        <input id="mentor-name" type="text" placeholder="e.g. Dr. Smith"
+               style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ddd; border-radius:4px;">
+      </label>
+
+      <button type="submit" style="width:100%; padding:10px; background:#3b82f6;
+              color:#fff; border:none; border-radius:4px; font-size:14px;">
+        Add Course
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
             <!-- All Courses Tab -->
             <div class="tab-content active" id="all-tab">
                 <div class="courses-grid">
@@ -635,6 +672,91 @@
             });
         });
     </script>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const modal    = document.getElementById('add-course-modal');
+  const openBtn  = document.querySelector('.add-course-btn');
+  const closeBtn = document.getElementById('close-modal');
+  const form     = document.getElementById('add-course-form');
+  const grid     = document.querySelector('.courses-grid');
+
+  //–– pick a random school-related image
+  const COURSE_IMAGES = [
+    'https://source.unsplash.com/collection/190727/300x150',
+    'https://source.unsplash.com/collection/142582/300x150',
+    'https://source.unsplash.com/collection/827743/300x150',
+    'https://source.unsplash.com/collection/9641636/300x150'
+  ];
+  function pickCourseImage() {
+    return COURSE_IMAGES[
+      Math.floor(Math.random() * COURSE_IMAGES.length)
+    ];
+  }
+
+  //–– mentor avatar map based on title keyword
+  const AVATAR_MAP = {
+    math:       'https://i.pravatar.cc/40?img=12',
+    'c++':      'https://i.pravatar.cc/40?img=32',
+    html:       'https://i.pravatar.cc/40?img=44',
+    javascript: 'https://i.pravatar.cc/40?img=56',
+    english:    'https://i.pravatar.cc/40?img=68',
+    science:    'https://i.pravatar.cc/40?img=80'
+  };
+  function pickAvatar(title) {
+    const t = title.toLowerCase();
+    for (let key in AVATAR_MAP) {
+      if (t.includes(key)) return AVATAR_MAP[key];
+    }
+    // fallback random
+    return `https://i.pravatar.cc/40?img=${Math.floor(Math.random() * 70 + 1)}`;
+  }
+
+  // 1) open
+  openBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+  });
+
+  // 2) close
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+  window.addEventListener('click', e => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+
+  // 3) on submit, inject new card
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const title  = document.getElementById('course-title').value.trim();
+    const mentor = document.getElementById('mentor-name').value.trim();
+    const imageUrl  = pickCourseImage();
+    const avatarUrl = pickAvatar(title);
+
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <img src="${imageUrl}" alt="${title}" class="course-image">
+      <div class="course-content">
+        <h3 class="course-title">${title}</h3>
+        <img src="${avatarUrl}"
+             alt="${mentor}"
+             class="instructor-avatar">
+        <p style="margin:5px 0 10px;font-size:14px;color:#666;">
+          Mentored by ${mentor}
+        </p>
+        <button class="view-course-btn">View Course</button>
+      </div>
+    `;
+
+    grid.appendChild(card);
+    form.reset();
+    modal.style.display = 'none';
+  });
+});
+
+</script>
+
 </body>
 </html>
 

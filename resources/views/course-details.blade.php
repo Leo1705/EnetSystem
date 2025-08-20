@@ -508,20 +508,18 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('people-management') }}" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Persons Management</span>
-                </a>
+               <a href="{{ route('people.index') }}" class="nav-link {{ request()->routeIs('people.*') ? 'active':'' }}">
+          <i class="fas fa-book"></i><span class="nav-text">People Management</span>
+        </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('courses') }}" class="nav-link">
+                <a href="{{ route('courses.index') }}" class="nav-link active">
                     <i class="fas fa-chalkboard"></i>
                     <span class="nav-text">Courses</span>
                 </a>
             </li>
-            
-            <li class="nav-item">
-                <a href="{{ route('course-details') }}" class="nav-link active">
+           <li class="nav-item">
+                <a href="{{ route('course-details') }}" class="nav-link">
                     <i class="fas fa-graduation-cap"></i>
                     <span class="nav-text">Courses Details</span>
                 </a>

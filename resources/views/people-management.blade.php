@@ -293,71 +293,53 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo-container">
-            <img src="{{ asset('EnetLogo.png') }}" alt="Logo" class="logo-image" width="200" height="50">
+            <img src="{{ asset('EnetLogo.png') }}" alt="Logo" class="logo-image">
         </div>
-        
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link">
-                    <i class="fas fa-th-large"></i>
-                    <span class="nav-text">Dashboard</span>
+                <a href="{{ route('dashboard') }}" class="nav-link active">
+                    <i class="fas fa-th-large"></i><span class="nav-text">Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('attendance.index') }}"class="nav-link">
-                    <i class="far fa-calendar"></i>
-                    <span class="nav-text">Calendar</span>
+                <a href="{{ route('attendance.index') }}" class="nav-link">
+                    <i class="far fa-calendar"></i><span class="nav-text">Calendar</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('people-management') }}" class="nav-link active">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Persons Management</span>
-                </a>
+                <a href="{{ route('people.index') }}" class="nav-link {{ request()->routeIs('people.*') ? 'active':'' }}">
+          <i class="fas fa-book"></i><span class="nav-text">People Management</span>
+        </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('courses') }}" class="nav-link">
-                    <i class="fas fa-chalkboard"></i>
-                    <span class="nav-text">Courses</span>
+                    <i class="fas fa-chalkboard"></i><span class="nav-text">Courses</span>
                 </a>
             </li>
-            
             <li class="nav-item">
                 <a href="{{ route('course-details') }}" class="nav-link">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span class="nav-text">Courses Details</span>
+                    <i class="fas fa-graduation-cap"></i><span class="nav-text">Course Details</span>
                 </a>
             </li>
-            
-
-            
             <li class="nav-item">
                 <a href="{{ route('course-group') }}" class="nav-link">
-                    <i class="far fa-comment-alt"></i>
-                    <span class="nav-text">Course Group</span>
+                    <i class="far fa-comment-alt"></i><span class="nav-text">Course Group</span>
                 </a>
             </li>
-            
             <div class="nav-divider"></div>
-            
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="far fa-question-circle"></i>
-                    <span class="nav-text">Help</span>
+                    <i class="far fa-question-circle"></i><span class="nav-text">Help</span>
                 </a>
             </li>
-            
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span class="nav-text">Setting</span>
+                    <i class="fas fa-cog"></i><span class="nav-text">Settings</span>
                 </a>
             </li>
-            
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span class="nav-text">Log out</span>
+                    <i class="fas fa-sign-out-alt"></i><span class="nav-text">Log Out</span>
                 </a>
             </li>
         </ul>
@@ -395,7 +377,8 @@
             <h2 class="content-title">List of All Persons</h2>
             
             <!-- Person Cards -->
-            <div class="person-card">
+           <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Filip Petkovski</div>
                     <div class="person-subject">Math</div>
@@ -405,7 +388,8 @@
                 <button class="manage-button">Manage</button>
             </div>
             
-            <div class="person-card">
+            <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Marko Maksimovski</div>
                     <div class="person-subject">German</div>
@@ -415,7 +399,8 @@
                 <button class="manage-button">Manage</button>
             </div>
             
-            <div class="person-card">
+           <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Matej Velickovic</div>
                     <div class="person-subject">C++</div>
@@ -425,7 +410,8 @@
                 <button class="manage-button">Manage</button>
             </div>
             
-            <div class="person-card">
+          <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Teodor Panevski</div>
                     <div class="person-subject">Math</div>
@@ -435,7 +421,8 @@
                 <button class="manage-button">Manage</button>
             </div>
             
-            <div class="person-card">
+          <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Petar Ilievski</div>
                     <div class="person-subject">English</div>
@@ -445,7 +432,8 @@
                 <button class="manage-button">Manage</button>
             </div>
             
-            <div class="person-card">
+           <div class="person-card" data-person-id="123">
+
                 <div class="person-info">
                     <div class="person-name">Ana Jordanovska</div>
                     <div class="person-subject">All Day Class</div>
@@ -456,7 +444,45 @@
             </div>
         </div>
     </div>
-    
+        <!-- Manage Person Modal -->
+    <div id="manage-person-modal" class="modal" style="display:none; position:fixed; top:0; left:0;
+         width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:200;">
+      <div class="modal-content" style="background:white; border-radius:12px; padding:20px; width:400px; position:relative;">
+        <button id="manage-modal-close" style="position:absolute; top:10px; right:10px;
+               background:none; border:none; font-size:20px; cursor:pointer;">×</button>
+        <h3 style="margin-bottom:15px;">Manage <span id="modal-person-name"></span></h3>
+
+        <form id="manage-person-form">
+          @csrf
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label for="group-count" style="display:block; margin-bottom:5px;">Group count</label>
+            <input type="number" id="group-count" name="group_count" class="form-input"
+                   style="width:100%; padding:8px; border:1px solid #e0e0e0; border-radius:6px;" min="1" value="1">
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label for="courses-select" style="display:block; margin-bottom:5px;">Assign courses</label>
+            <select id="courses-select" name="courses[]" multiple
+                    style="width:100%; padding:8px; border:1px solid #e0e0e0; border-radius:6px; height:100px;">
+              <option value="math">Math</option>
+              <option value="english">English</option>
+              <option value="c++">C++</option>
+              <option value="german">German</option>
+            </select>
+          </div>
+
+          <input type="hidden" id="modal-person-id" name="person_id" value="">
+
+          <button type="submit"
+                  style="width:100%; padding:10px; background:#3b82f6; color:white;
+                         border:none; border-radius:8px; font-weight:500; cursor:pointer;">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Add any JavaScript functionality here
@@ -490,7 +516,47 @@
                 });
             });
         });
+document.addEventListener('DOMContentLoaded', function(){
+  const modal      = document.getElementById('manage-person-modal');
+  const closeBtn   = document.getElementById('manage-modal-close');
+  const nameEl     = document.getElementById('modal-person-name');
+  const idInput    = document.getElementById('modal-person-id');
+  const groupInput = document.getElementById('group-count');
+  const courseSel  = document.getElementById('courses-select');
+
+  // wire up every “Manage” button
+  document.querySelectorAll('.manage-button').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+      const card = btn.closest('.person-card');
+      const name = card.querySelector('.person-name').textContent;
+      const id   = card.dataset.personId;
+      const groupText = card.querySelector('.group-button').textContent;
+      const groupNum  = parseInt(groupText) || 1;
+
+      nameEl.textContent   = name;
+      idInput.value        = id;
+      groupInput.value     = groupNum;
+      Array.from(courseSel.options).forEach(o=> o.selected = false);
+
+      modal.style.display = 'flex';
+    });
+  });
+
+  // close handlers
+  closeBtn.addEventListener('click', ()=> modal.style.display='none');
+  window.addEventListener('click', e => { if(e.target===modal) modal.style.display='none'; });
+
+  // fake-save
+  document.getElementById('manage-person-form')
+          .addEventListener('submit', e=>{
+    e.preventDefault();
+    const chosen = Array.from(courseSel.selectedOptions).map(o=>o.text).join(', ') || 'none';
+    alert(`Saved for ${nameEl.textContent}:\n• Group ${groupInput.value}\n• Courses ${chosen}`);
+    modal.style.display = 'none';
+  });
+});
     </script>
+    
 </body>
 </html>
 

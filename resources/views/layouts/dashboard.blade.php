@@ -1,16 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <!-- External Fonts (Google Fonts) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>@yield('page-title') — {{ config('app.name') }}</title>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Your dashboard.css -->
+  <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+
+  <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
         body { display: flex; height: 100vh; background-color: #f5f7f9; overflow: hidden; color: #333; }
         /* Sidebar Styling */
@@ -196,158 +197,43 @@
     </style>
 </head>
 <body>
-    <!-- Left Sidebar -->
-    <div class="sidebar">
-        <div class="logo-container">
-            <img src="{{ asset('EnetLogo.png') }}" alt="Logo" class="logo-image">
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link active">
-                    <i class="fas fa-th-large"></i><span class="nav-text">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('attendance.index') }}" class="nav-link">
-                    <i class="far fa-calendar"></i><span class="nav-text">Calendar</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('people.index') }}" class="nav-link {{ request()->routeIs('people.*') ? 'active':'' }}">
-          <i class="fas fa-book"></i><span class="nav-text">People Management</span>
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="logo-container">
+      <img src="{{ asset('EnetLogo.png') }}" alt="Logo" class="logo-image">
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item"><a href="{{ route('dashboard') }}" class="nav-link @if(request()->routeIs('dashboard')) active @endif"><i class="fas fa-th-large"></i>Dashboard</a></li>
+      <li class="nav-item"><a href="{{ route('attendance.index') }}" class="nav-link @if(request()->routeIs('attendance.*')) active @endif"><i class="far fa-calendar"></i>Calendar</a></li>
+      <li class="nav-item">
+        <a href="{{ route('people.index') }}"
+           class="nav-link @if(request()->routeIs('people.*')) active @endif">
+          <i class="fas fa-book"></i>People Management
         </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('courses.index') }}" class="nav-link">
-                    <i class="fas fa-chalkboard"></i><span class="nav-text">Courses</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('course-details') }}" class="nav-link">
-                    <i class="fas fa-graduation-cap"></i><span class="nav-text">Course Details</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('course-group') }}" class="nav-link">
-                    <i class="far fa-comment-alt"></i><span class="nav-text">Course Group</span>
-                </a>
-            </li>
-            <div class="nav-divider"></div>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-question-circle"></i><span class="nav-text">Help</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog"></i><span class="nav-text">Settings</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i><span class="nav-text">Log Out</span>
-                </a>
-            </li>
-        </ul>
+      </li>
+      <li class="nav-item"><a href="{{ route('courses.index') }}" class="nav-link @if(request()->routeIs('courses.*')) active @endif"><i class="fas fa-chalkboard"></i>Courses</a></li>
+      <li class="nav-item"><a href="{{ route('course-details') }}" class="nav-link"><i class="fas fa-graduation-cap"></i>Course Details</a></li>
+      <li class="nav-item"><a href="{{ route('course-group') }}" class="nav-link"><i class="far fa-comment-alt"></i>Course Group</a></li>
+      <li class="nav-divider"></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="far fa-question-circle"></i>Help</a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i>Settings</a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <h1 class="page-title">@yield('page-title')</h1>
+      <div class="header-right">
+        @yield('header-right')
+      </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="page-title">Dashboard</h1>
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search">
-            </div>
-        </div>
+    @yield('content')
+  </div>
 
-        <!-- Announcement Section -->
-        <div class="card">
-            <h2 class="card-title">Announcement</h2>
-            <div class="announcement-card">
-                @if($announcement)
-                    <p class="announcement-text">{{ $announcement->text }}</p>
-                @else
-                    <p class="announcement-text">No announcements at this time.</p>
-                @endif
-                <button class="announcement-btn">Join</button>
-            </div>
-        </div>
-
-        <!-- Children & Progress Section -->
-        <div class="card-container" style="display:flex; gap:20px;">
-            <!-- My Children -->
-            <div class="card" style="flex:1;">
-                <h2 class="card-title">My Children</h2>
-                <div class="children-container">
-                    @foreach($children as $child)
-                        <div class="child-card {{ $child->grade_color ?? 'green' }}">
-                            @if($child->avatar_url)
-                                <img src="{{ asset($child->avatar_url) }}" alt="{{ $child->name }}" class="child-avatar">
-                            @endif
-                            <div class="child-info">
-                                <h3 class="child-name">{{ $child->name }}</h3>
-                                <p class="child-grade">{{ $child->grade }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Completion Progress -->
-            <div class="card" style="flex:1;">
-                <h2 class="card-title">Completion Progress</h2>
-                <div class="progress-container">
-                    @foreach($progress as $item)
-                        <div class="progress-item">
-                            <div class="progress-header">
-                                <span class="progress-title">
-  {{ $item->course?->title ?? '—' }}
-</span>
-
-                                <span class="progress-chapter">{{ round($item->percent_complete) }}%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ $item->percent_complete }}%;"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <!-- Assignments Section -->
-        <div class="card">
-            <h2 class="card-title">Assignments</h2>
-            <table class="assignment-table">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Type</th>
-                        <th>Due</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($assignments as $a)
-                        <tr>
-                            <td>{{ $a->course?->title ?? '—' }}</td>
-                            <td>{{ ucfirst($a->status) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($a->due_at)->format('M j, Y g:i A') }}</td>
-                            <td>
-                                <span class="assignment-status status-{{ $a->status }}">
-                                    {{ ucfirst($a->status) }}
-                                </span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Right Sidebar -->
+  <!-- Right Sidebar -->
     <div class="right-sidebar">
         <div class="user-profile">
             <img src="/placeholder.svg?height=40&width=40" alt="User Avatar" class="user-avatar">

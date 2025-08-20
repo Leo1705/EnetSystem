@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Management</title>
+  
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -621,9 +623,66 @@
             background-color: #fce7e7;
             color: #e74c3c;
         }
+        .my-calendar {
+  display: flex;
+  flex-direction: column;
+}
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  background: #f0f0f0;
+  text-align: center;
+  font-weight: 600;
+}
+.weekday {
+  padding: 8px 0;
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  grid-auto-rows: 120px;
+  gap: 1px;
+  background: #ccc;
+}
+.day-cell {
+  background: white;
+  position: relative;
+  padding: 4px;
+  cursor: pointer;
+}
+.day-cell:hover {
+  background: #f9fbfc;
+}
+.date-number {
+  position: absolute;
+  top: 4px; right: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.event-pill {
+  display: block;
+  margin-top: 24px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* match your color‐classes */
+.event-pill.blue   { background: #e6eeff; color: #3b82f6; }
+.event-pill.pink   { background: #fde8e8; color: #e74c3c; }
+.event-pill.green  { background: #e6f7ee; color: #059669; }
+.event-pill.yellow { background: #fff8e6; color: #d97706; }
+.event-pill.purple { background: #f0e6ff; color: #8b5cf6; }
+
     </style>
 </head>
 <body>
+    @php
+  $eventsByDate = $events->groupBy(fn($e)=> $e->date->toDateString());
+@endphp
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo-container">
@@ -644,13 +703,12 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('people-management') }}" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Persons Management</span>
-                </a>
+               <a href="{{ route('people.index') }}" class="nav-link {{ request()->routeIs('people.*') ? 'active':'' }}">
+          <i class="fas fa-book"></i><span class="nav-text">People Management</span>
+        </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('courses') }}" class="nav-link">
+                <a href="{{ route('courses.index') }}" class="nav-link">
                     <i class="fas fa-chalkboard"></i>
                     <span class="nav-text">Courses</span>
                 </a>
@@ -695,7 +753,9 @@
             </li>
         </ul>
     </div>
-    
+
+
+
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
@@ -730,109 +790,104 @@
             </div>
         </div>
         
-        <div class="calendar-container">
-            <!-- Main Calendar -->
-            @php
+<div class="calendar-container">
+
+  {{-- build a 6×7 matrix of days --}}
+  @php
     use Carbon\Carbon;
-    // determine how many blanks before day 1
     $firstOfMonth = Carbon::create($year, $month, 1);
-    $startWeekday = $firstOfMonth->dayOfWeekIso; // 1 (Mon) – 7 (Sun)
+    $startWeekday = $firstOfMonth->dayOfWeekIso; //1=Mon…7=Sun
     $daysInMonth  = $firstOfMonth->daysInMonth;
-    $todayIso     = Carbon::now()->toDateString();
-@endphp
+    $weeks = []; $d = 1;
+    for($w=0;$w<6;$w++){
+      $row = [];
+      for($i=1;$i<=7;$i++){
+        if(($w===0 && $i<$startWeekday) || $d>$daysInMonth){
+          $row[] = null;
+        } else {
+          $dt = $firstOfMonth->copy()->day($d)->toDateString();
+          $row[] = ['num'=>$d,'date'=>$dt,'events'=>$eventsByDate[$dt]??collect()];
+          $d++;
+        }
+      }
+      $weeks[] = $row;
+    }
+  @endphp
 
-<div class="calendar-main">
-  <div class="calendar-header">
-    <h2 class="calendar-title">
-      {{ strtoupper($firstOfMonth->format('F Y')) }}
-    </h2>
-    <div class="calendar-actions">
-      {{-- nav to prev month --}}
-      <a href="{{ route('attendance.index', [
-            'year'=>$firstOfMonth->copy()->subMonth()->year,
-            'month'=>$firstOfMonth->copy()->subMonth()->month,
-          ]) }}"
-         class="view-btn"><i class="fas fa-chevron-left"></i></a>
-      <a href="{{ route('attendance.index', [
-            'year'=>$firstOfMonth->copy()->addMonth()->year,
-            'month'=>$firstOfMonth->copy()->addMonth()->month,
-          ]) }}"
-         class="view-btn"><i class="fas fa-chevron-right"></i></a>
-      <button class="new-schedule-btn" id="new-event-btn">New schedule</button>
-    </div>
-  </div>
-
-  <table class="calendar-grid">
-    <thead>
-      <tr>
-      @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $wd)
-        <th>{{ $wd }}</th>
-      @endforeach
-      </tr>
-    </thead>
-    <tbody>
-      @php $day = 1; @endphp
-
-      @for($week=0; $week<6; $week++)
-        @if($day > $daysInMonth) @break @endif
-        <tr>
-          @for($dow=1; $dow<=7; $dow++)
-            @if($week===0 && $dow < $startWeekday)
-              <td></td>
-            @elseif($day > $daysInMonth)
-              <td></td>
-            @else
-              @php
-                $dateString = $firstOfMonth->copy()->day($day)->toDateString();
-                $cellEvents = $events->filter(fn($e)=> $e->date->toDateString()===$dateString);
-              @endphp
-              <td>
-  <a href="{{ route('attendance.index', [
-        'year'       => $year,
-        'month'      => $month,
-        'date'       => $dateString,
-      ]) }}"
-     class="cell-link">
-    <div class="date-number">{{ $day }}</div>
-    {{-- …event dots… --}}
-  </a>
-</td>
-
-              @php $day++; @endphp
-            @endif
-          @endfor
-        </tr>
-      @endfor
-    </tbody>
-  </table>
-</div>
-
-{{-- Right Sidebar --}}
-{{-- Right-hand mini-schedule sidebar for the clicked day --}}
-<div class="calendar-sidebar">
-  <h3 class="sidebar-title">
-    Schedules for {{ \Carbon\Carbon::parse($currentDate)->format('F j, l') }}
-  </h3>
-
-  @if($dayEvents->isEmpty())
-    <p class="no-data">No scheduled classes on this day.</p>
-  @else
-    @foreach($dayEvents as $e)
-      <div class="time-slot">
-        <div class="time-label">
-          {{ $e->all_day
-               ? 'All day'
-               : $e->start_at->format('h:i A')
-          }}
-        </div>
-        <div class="time-event">
-          <div class="event-card {{ $e->color }}">
-            {{ $e->title }}
-          </div>
-        </div>
+  <div class="calendar-main">
+    <div class="calendar-header">
+      <h2 class="calendar-title">{{ strtoupper($firstOfMonth->format('F Y')) }}</h2>
+      <div class="calendar-actions">
+        <a href="?year={{$firstOfMonth->copy()->subMonth()->year}}&month={{$firstOfMonth->copy()->subMonth()->month}}" class="view-btn"><i class="fas fa-chevron-left"></i></a>
+        <a href="?year={{$firstOfMonth->copy()->addMonth()->year}}&month={{$firstOfMonth->copy()->addMonth()->month}}" class="view-btn"><i class="fas fa-chevron-right"></i></a>
+        <button class="new-schedule-btn" id="new-event-btn">New schedule</button>
       </div>
-    @endforeach
-  @endif
+    </div>
+
+    <div class="my-calendar">
+      <div class="weekdays">
+        @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $wd)
+          <div class="weekday">{{ $wd }}</div>
+        @endforeach
+      </div>
+      <div class="days">
+       @foreach($weeks as $week)
+  @foreach($week as $cell)
+    <div 
+      class="day-cell" 
+      @if($cell) 
+        onclick="window.location='?year={{$year}}&month={{$month}}&date={{$cell['date']}}'" 
+      @endif
+    >
+      @if($cell)
+        <!-- day number opens the modal -->
+        <div 
+          class="date-number" 
+         onclick="event.stopPropagation(); openModalWith('{{ $cell['date'] }}')">
+        
+          {{ $cell['num'] }}
+        </div>
+
+        {{-- your pills --}}
+        @foreach($cell['events'] as $ev)
+          <span class="event-pill {{ $ev->color }}">
+            @if(!empty($ev->start_time))
+              {{ \Carbon\Carbon::parse($ev->start_time)->format('H:i') }}
+            @endif
+            {{ Str::limit($ev->subject, 12) }}
+          </span>
+        @endforeach
+      @endif
+    </div>
+  @endforeach
+@endforeach
+
+      </div>
+    </div>
+
+    {{-- sidebar of clicked‑day events --}}
+    <div class="calendar-sidebar">
+      <h3 class="sidebar-title">
+        Events on {{ \Carbon\Carbon::parse($currentDate)->format('F j, Y') }}
+      </h3>
+      @forelse($dayEvents as $ev)
+  <div class="event-card {{ $ev->color }}">
+    <strong>
+      @if(!empty($ev->start_time))
+        {{ \Carbon\Carbon::parse($ev->start_time)->format('H:i') }}
+      @endif
+    </strong>
+    {{ $ev->subject }}
+    <p>{{ $ev->description }}</p>
+  </div>
+@empty
+  <p>No events.</p>
+@endforelse
+
+
+    </div>
+
+  </div>
 </div>
 
 
@@ -877,10 +932,32 @@
         </div>
       </div>
 
-      <div class="form-group checkbox-group">
-        <input type="checkbox" name="all_day" id="all-day" class="checkbox-input" value="1">
-        <span class="checkbox-custom"><i class="fas fa-check"></i></span>
-        <label for="all-day" class="checkbox-label">All day</label>
+     <!-- All‑day checkbox -->
+<div class="form-group checkbox-group">
+  <input type="checkbox"
+         name="all_day"
+         id="all-day"
+         class="checkbox-input"
+         value="1"
+         {{ old('all_day') ? 'checked' : '' }}>
+  <span class="checkbox-custom"><i class="fas fa-check"></i></span>
+  <label for="all-day" class="checkbox-label">All day</label>
+</div>
+
+<!-- Recurrence selector -->
+<div class="form-group">
+  <label class="form-label" for="recurrence">Repeat</label>
+  <select name="recurrence"
+          id="recurrence"
+          class="form-input">
+    <option value="">Never</option>
+    <option value="daily"   {{ old('recurrence')=='daily'   ? 'selected' : '' }}>Daily</option>
+    <option value="weekly"  {{ old('recurrence')=='weekly'  ? 'selected' : '' }}>Weekly</option>
+    <option value="monthly" {{ old('recurrence')=='monthly' ? 'selected' : '' }}>Monthly</option>
+  </select>
+</div>
+
+
       </div>
 
       <button type="submit" class="submit-btn">Save Event</button>
@@ -889,103 +966,39 @@
 </div>
 
             
-            <!-- Calendar Sidebar -->
-            {{-- Right-hand mini-schedule sidebar --}}
-<div class="calendar-sidebar">
-  <h3 class="sidebar-title">Schedules</h3>
-
-  @if($dayEvents->isEmpty())
-    <p class="no-data">No scheduled classes today.</p>
-  @else
-    @foreach($dayEvents as $e)
-      <div class="time-slot">
-        <div class="time-label">
-          {{-- if all_day is set, say “All day” else show H:i A --}}
-          {{ $e->all_day
-               ? 'All day'
-               : $e->start_at->format('h:i A')
-          }}
-        </div>
-        <div class="time-event">
-          {{-- main event title --}}
-          <div class="event-card {{ $e->color }}">
-            {{ $e->title }}
-          </div>
-          {{-- optional description underneath --}}
-          @if($e->description)
-            <div class="event-card gray" style="margin-top:4px;">
-              {{ $e->description }}
-            </div>
-          @endif
-        </div>
-      </div>
-    @endforeach
-  @endif
-</div>
-
-        </div>
-    </div>
-    
-    <!-- New Event Modal -->
-    <div id="new-event-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Event</h3>
-                <button class="close-btn">&times;</button>
-            </div>
             
-            <form id="event-form">
-                <div class="form-group">
-                    <label for="event-title" class="form-label">Event Title</label>
-                    <input type="text" id="event-title" class="form-input" placeholder="Enter event title" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-date" class="form-label">Date</label>
-                    <input type="date" id="event-date" class="form-input" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-time" class="form-label">Time</label>
-                    <input type="time" id="event-time" class="form-input">
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-description" class="form-label">Description</label>
-                    <textarea id="event-description" class="form-textarea" placeholder="Enter event description"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Color</label>
-                    <div class="color-options">
-                        <div class="color-option color-blue selected" data-color="blue"></div>
-                        <div class="color-option color-pink" data-color="pink"></div>
-                        <div class="color-option color-green" data-color="green"></div>
-                        <div class="color-option color-yellow" data-color="yellow"></div>
-                        <div class="color-option color-purple" data-color="purple"></div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="checkbox-group">
-                        <input type="checkbox" id="all-day" class="checkbox-input">
-                        <span class="checkbox-custom"><i class="fas fa-check"></i></span>
-                        <span class="checkbox-label">All day</span>
-                    </label>
-                </div>
-                
-                <div class="form-group">
-                    <label class="checkbox-group">
-                        <input type="checkbox" id="repeat-event" class="checkbox-input">
-                        <span class="checkbox-custom"><i class="fas fa-check"></i></span>
-                        <span class="checkbox-label">Repeat</span>
-                    </label>
-                </div>
-                
-                <button type="submit" class="submit-btn">Save Event</button>
-            </form>
+
+
         </div>
     </div>
+   
+   @if($currentDate)
+  <div class="calendar-sidebar">
+    <h3 class="sidebar-title">
+      Events on {{ \Carbon\Carbon::parse($currentDate)->format('F j, Y') }}
+    </h3>
+
+    @forelse($dayEvents as $ev)
+      <div class="event-card {{ $ev->color ?? 'gray' }}">
+        @if(!empty($ev->time))
+          <div>
+            <strong>{{ \Carbon\Carbon::parse($ev->time)->format('H:i') }}</strong>
+            {{ $ev->title ?? '(no title)' }}
+          </div>
+        @else
+          <div>{{ $ev->title ?? '(no title)' }}</div>
+        @endif
+
+        <p>{{ $ev->description ?? '' }}</p>
+      </div>
+    @empty
+      <p>No events.</p>
+    @endforelse
+
+  </div>
+@endif
+
+
     
     <!-- Event Details Modal -->
     <div id="event-details-modal" class="modal">
@@ -1007,47 +1020,32 @@
         </div>
     </div>
     
-    <script>
-document.addEventListener('DOMContentLoaded', ()=> {
-  const newEventModal = document.getElementById('new-event-modal');
-  const openBtn       = document.getElementById('new-event-btn');
-  const closeBtns     = newEventModal.querySelectorAll('.close-btn');
-  const dateInput     = document.getElementById('event-date');
-  const colorInputs   = document.querySelectorAll('.color-option');
+<script>
+  // make this global so inline onclick can see it:
+  window.openModalWith = function(dateStr) {
+    document.getElementById('event-date').value = dateStr;
+    document.getElementById('new-event-modal').style.display = 'flex';
+  };
 
-  // 1) Click a cell to open modal
-  document.querySelectorAll('.calendar-grid td[data-date]').forEach(td => {
-    td.addEventListener('click', ()=>{
-      dateInput.value = td.dataset.date;
-      newEventModal.style.display = 'flex';
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal     = document.getElementById('new-event-modal');
+    const closeBtns = modal.querySelectorAll('.close-btn');
+
+    // close on X
+    closeBtns.forEach(b => b.addEventListener('click', () => {
+      modal.style.display = 'none';
+    }));
+    // close on outside click
+    window.addEventListener('click', e => {
+      if (e.target === modal) modal.style.display = 'none';
     });
   });
-
-  // 2) “New schedule” button
-  openBtn.addEventListener('click', ()=>{
-    // default to today
-    dateInput.value = new Date().toISOString().slice(0,10);
-    newEventModal.style.display = 'flex';
-  });
-
-  // 3) Close
-  closeBtns.forEach(b=> b.addEventListener('click', ()=> {
-    newEventModal.style.display = 'none';
-  }));
-  window.addEventListener('click', e=>{
-    if (e.target === newEventModal) newEventModal.style.display='none';
-  });
-
-  // 4) Color picker
-  colorInputs.forEach(opt=>{
-    opt.addEventListener('click', ()=>{
-      colorInputs.forEach(o=> o.classList.remove('selected'));
-      opt.classList.add('selected');
-      document.getElementById('event-color').value = opt.dataset.color;
-    });
-  });
-});
 </script>
+
+
+
+
+
 
 </body>
 </html>
